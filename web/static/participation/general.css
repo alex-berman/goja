@@ -1,0 +1,36 @@
+html *
+{
+   font-family: Helvetica !important;
+   color: black;
+   font-size: 16px;
+}
+
+.page {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.container {
+    margin: 0 auto;
+    border: 2px solid #eee;
+    border-radius: 20px;
+    width: 400px;
+    padding: 10px;
+}
+
+#content {
+    padding: 0 20 0 20;
+    line-height: 120%;
+}
+
+input[type=button] {
+   font-size: 16px;
+   padding: 5px;
+   min-width: 80px;
+}

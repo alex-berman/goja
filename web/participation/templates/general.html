@@ -1,0 +1,36 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="imagetoolbar" content="no" />
+<meta name="cache-control" content="no-cache" />
+<title>Chat experiment</title>
+<link rel="stylesheet" href="static/participation/general.css">
+<script src="static/socket.io.min.js"></script>
+<script src="static/socket.js"></script>
+<script src="static/participation/general.js"></script>
+<script>
+{% if participant %}
+participant = '{{ participant }}';
+{% endif %}
+</script>
+</head>
+
+<body onLoad="initializeParticipation()">
+
+<div class="page">
+    <div class="container">
+        <div id="content">
+{% if not participant %}
+            <p>Welcome to this chat experiment!</p>
+            <p><i>By clicking Start below, you agree that the data collected through your participation is used for research purposes.</i></p>
+            <p>
+                <input type="button" value="Start" onClick="validateWebSocketsAndStartExperiment()">
+            </p>
+{% endif %}
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
