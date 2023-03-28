@@ -1,35 +1,5 @@
-{% if state == 'pre_rate' %}
-            <p>In this first part of the experiment, you will listen to and rate excerpts of music (and possibly other kinds of sound). This part is expected to take approximately 5 minutes.</p>
-            <p>
-                <input type="button" value="OK" onClick="emitProceed()">
-            </p>
-
-{% elif state == 'pre_pair' %}
-            <p>Your ratings have been registered and will be analyzed by the AI.</p>
-            <p>You will now be paired up with another participant.</p>
-            <p>
-                <input type="button" value="OK" onClick="emitProceed()">
-            </p>
-
-{% elif state == 'pair' %}
-            <p>Waiting for another participant to become available...</p>
-
-{% elif state == 'pre_chat' %}
-            <p>You have been paired up with another participant.</p>
-    {% if role == 'operator' %}
-            <p>
-                In this second part of the experiment, you will be assigned the role of a <b>test operator</b>. This means that you will chat
-            with the other participant about his/her test results. The test results and various information
-            will be presented to you in a tool. The other participant does not have access to this tool.
-            </p>
-    {% elif role == 'respondent' %}
-            <p>
-                In this second part of the experiment, you will <b>receive your test results</b>. This will be done in the form
-                of a chat with the other participant, who is given access to your test results and various information.
-            </p>
-    {% endif %}
-            <p>Note that participation is anonymous. Please do not share any personal information (such as your name) in the chat.</p>
-            <p>The chat continues for as long as you and the other participant want. When you want to leave the conversation, and thereby the experiment, you can close the browser.</p>
+{% if state == 'pre_chat' %}
+            <p>(perhaps some additional info here)</p>
             <p>
                 <input type="button" value="OK" onClick="emitProceed()">
             </p>

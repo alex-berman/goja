@@ -8,7 +8,9 @@ from flask import Flask, request
 from flask_socketio import SocketIO
 
 import participation.participate
+from participation.states import ParticipationStateMachine
 import dialog.chat
+from statemanagement import global_state
 
 
 app = Flask(__name__)
@@ -29,8 +31,11 @@ def participate():
 @socketio.on('start')
 def start():
     logger.info(f'start')
-    result = db.participants.insert_one({'session_id': request.sid, 'state': 'pre_rate'})
-    participant = str(result.inserted_id)
+    participant = participation.participate.create_participant_id()
+    global_state.participants[participant] = {
+        'state': ParticipationStateMachine().current_state.name,
+        'dialog_history': []
+    }
     return participant
 
 
@@ -38,29 +43,23 @@ def start():
 def proceed(json):
     logger.info(f'proceed {json}')
     participant = json['participant']
-    db.participants.update_one(
-        {'_id': ObjectId(participant)},
-        {'$set': {'session_id': request.sid}})
-    return participation.participate.proceed(participant, request.sid, trial, db)
+    global_state.participants[participant]['session_id'] = request.sid
+    return participation.participate.proceed(participant, request.sid)
 
 
 @socketio.on('request_content')
 def handle_request_for_content(json):
     logger.info(f'request_content {json}')
     participant = json['participant']
-    db.participants.update_one(
-        {'_id': ObjectId(participant)},
-        {'$set': {'session_id': request.sid}})
-    return participation.participate.handle_request_for_content(participant, db)
+    global_state.participants[participant]['session_id'] = request.sid
+    return participation.participate.handle_request_for_content(participant)
 
 
 @socketio.on('update_session')
 def update_session(json):
     logger.info(f'update_session {json}')
     participant = json['participant']
-    db.participants.update_one(
-        {'_id': ObjectId(participant)},
-        {'$set': {'session_id': request.sid}})
+    global_state.participants[participant]['session_id'] = request.sid
 
 
 @socketio.on('request_chat_history')
@@ -73,18 +72,9 @@ def request_chat_history(json):
 @socketio.on('utter')
 def handle_utterance(json):
     logger.info('handle_utterance: ' + str(json))
-    role = json['role']
     participant = json['participant']
     utterance = json['utterance']
-    return dialog.chat.handle_utterance(role, participant, utterance)
-
-
-@socketio.on('typing')
-def handle_typing(json):
-    logger.info('handle_started_typing: ' + str(json))
-    participant = json['participant']
-    event = json['event']
-    return dialog.chat.handle_typing(participant, event)
+    return dialog.chat.handle_utterance(participant, utterance)
 
 
 if __name__ == '__main__':

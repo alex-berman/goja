@@ -3,3 +3,4 @@ jinja2
 flask-socketio
 eventlet
 python-statemachine
+openai-async
