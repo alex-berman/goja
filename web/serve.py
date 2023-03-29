@@ -17,7 +17,6 @@ from statemanagement import global_state
 app = Flask(__name__)
 logger = dialog.chat.logger = participation.participate.logger = app.logger
 socketio = SocketIO(app, cors_allowed_origins="*", logger=True, engineio_logger=True)
-bot = Bot(getenv('OPENAI_API_KEY'))
 
 @app.route('/dev/status', methods=['GET'])
 def status():
@@ -80,7 +79,9 @@ def handle_utterance(json):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
+    parser.add_argument('settings', help='path to YAML file with settings')
     parser.add_argument('--port')
     parser.add_argument('--host')
     args = parser.parse_args()
+    bot = Bot(getenv('OPENAI_API_KEY'), args.settings)
     socketio.run(app, host=args.host, port=args.port)

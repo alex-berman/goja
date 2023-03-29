@@ -4,3 +4,4 @@ flask-socketio
 eventlet
 python-statemachine
 openai
+pyyaml

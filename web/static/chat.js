@@ -34,7 +34,7 @@ function createUtteranceDiv(utterance_info) {
     utteranceBubble.classList.add('background_' + utterance_info.role);
     var utteranceDiv = document.createElement('div');
     utteranceDiv.className = 'utterance';
-    utteranceDiv.innerHTML = utterance_info.content;
+    utteranceDiv.innerHTML = utterance_info.content.replaceAll('\n', '<br>');
     utteranceBubble.appendChild(utteranceDiv);
     container.appendChild(utteranceBubble);
     return container;
