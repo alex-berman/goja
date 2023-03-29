@@ -20,5 +20,8 @@ def handle_utterance(participant, utterance):
         'role': 'user',
         'utterance': utterance
     }
-    global_state.participants[participant]['dialog_history'].append(utterance_info)
+    participant_info = global_state.participants[participant]
+    participant_info['dialog_history'].append(utterance_info)
+    session_id = participant_info['session_id']
+    emit('utterance', utterance_info, to=session_id)
     return True
