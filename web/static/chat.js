@@ -1,6 +1,6 @@
 const ROLE_LABEL = {
-    'operator': 'Operator',
-    'respondent': 'Test taker'
+    'user': 'You',
+    'system': 'Bot'
 };
 
 const socket = createSocket();
@@ -44,7 +44,7 @@ function createUtteranceDiv(utterance_info) {
 function initializeChat() {
     document.getElementById('chat_input').focus();
     chatHistoryDiv = document.getElementById('chat_history');
-    otherRole = (role == 'operator' ? 'respondent' : 'operator');
+    otherRole = (role == 'system' ? 'user' : 'system');
     socket.emit('request_chat_history', { participant: participant });
 }
 
