@@ -21,20 +21,21 @@ def handle_utterance(participant, utterance, bot, socketio):
         'content': utterance
     }
     participant_info = global_state.participants[participant]
+    logger.info('utterance', utterance=utterance_info, participant=participant)
     participant_info['dialog_history'].append(utterance_info)
     session_id = participant_info['session_id']
     emit('utterance', utterance_info, to=session_id)
     socketio.start_background_task(
-        get_and_process_response_from_bot, bot, participant_info['dialog_history'], session_id, socketio)
+        get_and_process_response_from_bot, participant, bot, participant_info['dialog_history'], session_id, socketio)
 
 
-def get_and_process_response_from_bot(bot, dialog_history, session_id, socketio):
+def get_and_process_response_from_bot(participant, bot, dialog_history, session_id, socketio):
     logger.debug('getting response from bot')
     utterance = bot.get_response(dialog_history)
-    logger.info('response from bot: ' + utterance)
     utterance_info = {
         'role': 'assistant',
         'content': utterance
     }
+    logger.info('utterance', utterance=utterance_info, participant=participant)
     dialog_history.append(utterance_info)
     socketio.emit('utterance', utterance_info, to=session_id)

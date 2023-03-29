@@ -6,6 +6,7 @@ import pathlib
 import flask
 from flask import Flask, request
 from flask_socketio import SocketIO
+import structlog
 
 import participation.participate
 from participation.states import ParticipationStateMachine
@@ -14,8 +15,15 @@ from dialog.bot import Bot
 from statemanagement import global_state
 
 
+structlog.configure(
+    processors=[
+        structlog.processors.dict_tracebacks,
+        structlog.processors.JSONRenderer()
+    ]
+)
+
 app = Flask(__name__)
-logger = dialog.chat.logger = participation.participate.logger = app.logger
+logger = dialog.chat.logger = participation.participate.logger = app.logger = structlog.get_logger()
 socketio = SocketIO(app, cors_allowed_origins="*", logger=True, engineio_logger=True)
 
 @app.route('/dev/status', methods=['GET'])
@@ -71,7 +79,6 @@ def request_chat_history(json):
 
 @socketio.on('utter')
 def handle_utterance(json):
-    logger.info('handle_utterance: ' + str(json))
     participant = json['participant']
     utterance = json['utterance']
     return dialog.chat.handle_utterance(participant, utterance, bot, socketio)
