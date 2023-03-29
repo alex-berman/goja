@@ -51,15 +51,15 @@ html *
     margin-top: 15px;
 }
 
-.utterance_container_self {
+.utterance_container_user {
     padding-left: 20%;
 }
 
-.utterance_container_other {
+.utterance_container_assistant {
     width: 80%;
 }
 
-.background_system {
+.background_assistant {
     background-color: #f9fae8;
 }
 

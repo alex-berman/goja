@@ -10,13 +10,14 @@ from flask_socketio import SocketIO
 import participation.participate
 from participation.states import ParticipationStateMachine
 import dialog.chat
+from dialog.bot import Bot
 from statemanagement import global_state
 
 
 app = Flask(__name__)
 logger = dialog.chat.logger = participation.participate.logger = app.logger
 socketio = SocketIO(app, cors_allowed_origins="*", logger=True, engineio_logger=True)
-
+bot = Bot(getenv('OPENAI_API_KEY'))
 
 @app.route('/dev/status', methods=['GET'])
 def status():
@@ -74,7 +75,7 @@ def handle_utterance(json):
     logger.info('handle_utterance: ' + str(json))
     participant = json['participant']
     utterance = json['utterance']
-    return dialog.chat.handle_utterance(participant, utterance)
+    return dialog.chat.handle_utterance(participant, utterance, bot)
 
 
 if __name__ == '__main__':

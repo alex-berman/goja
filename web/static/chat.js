@@ -1,6 +1,6 @@
 const ROLE_LABEL = {
     'user': 'You',
-    'system': 'Bot'
+    'assistant': 'Bot'
 };
 
 const socket = createSocket();
@@ -11,7 +11,6 @@ socket.on('connect', function() {
 
 var roleOfPreviousUtterance;
 var chatHistoryDiv;
-var otherRole;
 
 socket.on('utterance', (utterance_info) => {
     console.log('utterance:');
@@ -23,7 +22,7 @@ socket.on('utterance', (utterance_info) => {
 
 function createUtteranceDiv(utterance_info) {
     var container = document.createElement('div');
-    container.className = (utterance_info.role == role ? 'utterance_container_self' : 'utterance_container_other');
+    container.className = 'utterance_container_' + utterance_info.role;
     if(utterance_info.role != roleOfPreviousUtterance) {
         var roleDiv = document.createElement('div');
         roleDiv.className = 'role';
@@ -35,7 +34,7 @@ function createUtteranceDiv(utterance_info) {
     utteranceBubble.classList.add('background_' + utterance_info.role);
     var utteranceDiv = document.createElement('div');
     utteranceDiv.className = 'utterance';
-    utteranceDiv.innerHTML = utterance_info.utterance;
+    utteranceDiv.innerHTML = utterance_info.content;
     utteranceBubble.appendChild(utteranceDiv);
     container.appendChild(utteranceBubble);
     return container;
@@ -44,7 +43,6 @@ function createUtteranceDiv(utterance_info) {
 function initializeChat() {
     document.getElementById('chat_input').focus();
     chatHistoryDiv = document.getElementById('chat_history');
-    otherRole = (role == 'system' ? 'user' : 'system');
     socket.emit('request_chat_history', { participant: participant });
 }
 
