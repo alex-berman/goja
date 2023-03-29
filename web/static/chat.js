@@ -49,29 +49,13 @@ function initializeChat() {
 function handleKeyPress(e) {
     var code = (e.keyCode ? e.keyCode : e.which);
     if (code == 13) { //Enter keycode
-        document.getElementById('chat_input').disabled = true;
         const utterance = document.getElementById('chat_input').value;
         console.log('emit utter: ' + utterance);
-        socket.volatile.timeout(3000).emit('utter', {
+        socket.emit('utter', {
             participant: participant,
             utterance: utterance
-        }, (err, response) => {
-            if(err) {
-                console.log('timed out');
-                alert('Sorry, sending the message took too long. You may try again.');
-            }
-            else {
-                console.log('got response: ' + response);
-                if(response) {
-                    window.setTimeout(clearChatInput, 1);
-                }
-                else {
-                    alert('Sorry, something went wrong when sending the message.');
-                }
-            }
-            document.getElementById('chat_input').disabled = false;
-            document.getElementById('chat_input').focus();
         });
+        window.setTimeout(clearChatInput, 1);
     }
 }
 

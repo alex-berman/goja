@@ -75,7 +75,7 @@ def handle_utterance(json):
     logger.info('handle_utterance: ' + str(json))
     participant = json['participant']
     utterance = json['utterance']
-    return dialog.chat.handle_utterance(participant, utterance, bot)
+    return dialog.chat.handle_utterance(participant, utterance, bot, socketio)
 
 
 if __name__ == '__main__':
