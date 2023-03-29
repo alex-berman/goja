@@ -2,6 +2,7 @@ import json
 import argparse
 from os import getenv
 import pathlib
+import logging.config
 
 import flask
 from flask import Flask, request
@@ -15,16 +16,52 @@ from dialog.bot import Bot
 from statemanagement import global_state
 
 
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('settings', help='path to YAML file with settings')
+    parser.add_argument('--log', default='goja.log')
+    parser.add_argument('--port')
+    parser.add_argument('--host')
+    args = parser.parse_args()
+    bot = Bot(getenv('OPENAI_API_KEY'), args.settings)
+
+
+logging.config.dictConfig({
+        "version": 1,
+        "disable_existing_loggers": False,
+        "handlers": {
+            "default": {
+                "level": "DEBUG",
+                "class": "logging.StreamHandler",
+            },
+            "file": {
+                "level": "DEBUG",
+                "class": "logging.handlers.WatchedFileHandler",
+                "filename": args.log,
+            },
+        },
+        "loggers": {
+            "": {
+                "handlers": ["default", "file"],
+                "level": "DEBUG",
+                "propagate": True,
+            },
+        }
+})
 structlog.configure(
     processors=[
         structlog.processors.dict_tracebacks,
         structlog.processors.JSONRenderer()
-    ]
+    ],
+    logger_factory=structlog.stdlib.LoggerFactory(),
+    wrapper_class=structlog.stdlib.BoundLogger,
+    cache_logger_on_first_use=True,
 )
+
 
 app = Flask(__name__)
 logger = dialog.chat.logger = participation.participate.logger = app.logger = structlog.get_logger()
-socketio = SocketIO(app, cors_allowed_origins="*", logger=True, engineio_logger=True)
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 @app.route('/dev/status', methods=['GET'])
 def status():
@@ -38,8 +75,9 @@ def participate():
 
 @socketio.on('start')
 def start():
-    logger.info(f'start')
+    logger.info('start')
     participant = participation.participate.create_participant_id()
+    logger.info('add_participant', participant=participant)
     global_state.participants[participant] = {
         'state': ParticipationStateMachine().current_state.name,
         'dialog_history': []
@@ -48,47 +86,42 @@ def start():
 
 
 @socketio.on('proceed')
-def proceed(json):
-    logger.info(f'proceed {json}')
-    participant = json['participant']
+def proceed(payload):
+    logger.info('proceed', payload=payload)
+    participant = payload['participant']
     global_state.participants[participant]['session_id'] = request.sid
     return participation.participate.proceed(participant, request.sid)
 
 
 @socketio.on('request_content')
-def handle_request_for_content(json):
-    logger.info(f'request_content {json}')
-    participant = json['participant']
+def handle_request_for_content(payload):
+    logger.info('request_content', payload=payload)
+    participant = payload['participant']
     global_state.participants[participant]['session_id'] = request.sid
     return participation.participate.handle_request_for_content(participant)
 
 
 @socketio.on('update_session')
-def update_session(json):
-    logger.info(f'update_session {json}')
-    participant = json['participant']
+def update_session(payload):
+    logger.info('update_session', payload=payload)
+    participant = payload['participant']
     global_state.participants[participant]['session_id'] = request.sid
 
 
 @socketio.on('request_chat_history')
-def request_chat_history(json):
-    logger.info(f'request_chat_history {json}')
-    participant = json['participant']
+def request_chat_history(payload):
+    logger.info('request_chat_history', payload=payload)
+    participant = payload['participant']
     dialog.chat.send_history(participant)
 
 
 @socketio.on('utter')
-def handle_utterance(json):
-    participant = json['participant']
-    utterance = json['utterance']
+def handle_utterance(payload):
+    logger.info('utter', payload=payload)
+    participant = payload['participant']
+    utterance = payload['utterance']
     return dialog.chat.handle_utterance(participant, utterance, bot, socketio)
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('settings', help='path to YAML file with settings')
-    parser.add_argument('--port')
-    parser.add_argument('--host')
-    args = parser.parse_args()
-    bot = Bot(getenv('OPENAI_API_KEY'), args.settings)
     socketio.run(app, host=args.host, port=args.port)
