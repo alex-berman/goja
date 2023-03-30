@@ -34,10 +34,20 @@ function createUtteranceDiv(utterance_info) {
     utteranceBubble.classList.add('background_' + utterance_info.role);
     var utteranceDiv = document.createElement('div');
     utteranceDiv.className = 'utterance';
-    utteranceDiv.innerHTML = utterance_info.content.replaceAll('\n', '<br>');
+    utteranceDiv.innerHTML = formatUtterance(utterance_info.content);
     utteranceBubble.appendChild(utteranceDiv);
     container.appendChild(utteranceBubble);
     return container;
+}
+
+function formatUtterance(utterance) {
+  var replacement = utterance.replace('\n', '<br>');
+  if(replacement.includes('\n')) {
+    return formatUtterance(replacement);
+  }
+  else {
+    return replacement;
+  }
 }
 
 function initializeChat() {
