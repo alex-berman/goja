@@ -40,7 +40,7 @@ def proceed(participant, session_id):
 
 def send_update_to_client(participant, state):
     if state == 'chat':
-        emit('redirect', {'href': 'participate?participant=' + participant})
+        emit('redirect', {'href': '?participant=' + participant})
     else:
         template = env.get_template('content.html')
         content = template.render(state=state)

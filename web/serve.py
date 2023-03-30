@@ -23,7 +23,10 @@ if __name__ == '__main__':
     parser.add_argument('--port')
     parser.add_argument('--host')
     args = parser.parse_args()
-    bot = Bot(getenv('OPENAI_API_KEY'), args.settings)
+    openai_api_key = getenv('OPENAI_API_KEY')
+    if openai_api_key is None:
+        raise Exception('Please set the OPENAI_API_KEY environment variable')
+    bot = Bot(openai_api_key, args.settings)
 
 
 logging.config.dictConfig({
@@ -68,7 +71,7 @@ def status():
     return 'OK'
 
 
-@app.route("/participate", methods=['POST', 'GET'])
+@app.route("/", methods=['POST', 'GET'])
 def participate():
     return participation.participate.participate(request)
 

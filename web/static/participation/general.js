@@ -9,7 +9,7 @@ function validateWebSocketsAndStartExperiment() {
         console.log('got response: ' + response);
         if(response) {
             const participant = response;
-            location.href = 'participate?participant=' + participant;
+            location.href = '?participant=' + participant;
         }
         else {
             alert('Sorry, something went wrong when connecting to the server. You could try refreshing the page.');
