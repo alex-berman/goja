@@ -6,3 +6,4 @@ python-statemachine
 openai
 pyyaml
 structlog
+pandas

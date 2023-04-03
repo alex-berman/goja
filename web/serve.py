@@ -1,13 +1,13 @@
-import json
 import argparse
 from os import getenv
-import pathlib
 import logging.config
 
-import flask
 from flask import Flask, request
 from flask_socketio import SocketIO
 import structlog
+import yaml
+import pandas as pd
+import numpy as np
 
 import participation.participate
 from participation.states import ParticipationStateMachine
@@ -15,6 +15,8 @@ import dialog.chat
 from dialog.bot import Bot
 from statemanagement import global_state
 
+
+cases = None
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -26,7 +28,10 @@ if __name__ == '__main__':
     openai_api_key = getenv('OPENAI_API_KEY')
     if openai_api_key is None:
         raise Exception('Please set the OPENAI_API_KEY environment variable')
-    bot = Bot(openai_api_key, args.settings)
+    settings = yaml.load(open(args.settings), yaml.Loader)
+    bot = Bot(openai_api_key, settings)
+    if 'cases' in settings:
+        cases = pd.read_csv(settings['cases'])
 
 
 logging.config.dictConfig({
@@ -85,6 +90,10 @@ def start():
         'state': ParticipationStateMachine().current_state.name,
         'dialog_history': []
     }
+    if cases is not None:
+        num_cases = len(cases.index)
+        global_state.participants[participant]['random_case_indexes'] = np.random.choice(num_cases, size=num_cases)
+        global_state.participants[participant]['case_count'] = 0
     return participant
 
 
@@ -93,7 +102,7 @@ def proceed(payload):
     logger.info('proceed', payload=payload)
     participant = payload['participant']
     global_state.participants[participant]['session_id'] = request.sid
-    return participation.participate.proceed(participant, request.sid)
+    return participation.participate.proceed(participant, cases, request.sid)
 
 
 @socketio.on('request_content')

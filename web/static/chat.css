@@ -11,12 +11,25 @@ html *
     justify-content: center;
 }
 
-.chat_container {
-    margin: 0 auto;
+#case_info_container {
+    vertical-align: top;
+    width: 400;
+    top: 0;
+}
+
+#case_info {
     border: 2px solid #eee;
     border-radius: 20px;
-    width: 400px;
+    padding: 10px;
+    background-color: white;
+    margin-right: 15px;
+}
+
+.chat_container {
+    width: 400;
     height: 100%;
+    border: 2px solid #eee;
+    border-radius: 20px;
     padding: 10px;
     background-color: white;
 }

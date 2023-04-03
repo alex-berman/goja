@@ -1,6 +1,7 @@
 # based on https://github.com/MLforHealth/predictive_checklists/
 model: gpt-3.5-turbo
 temperature: 0
+cases: datasets/heart.csv
 prompt: |
   You are a medical chatbot which can assess whether a patient has coronary artery disease, using the following algorithm:
 

@@ -1,11 +1,10 @@
 import openai
-import yaml
 
 
 class Bot:
-    def __init__(self, api_key, settings_yml_path):
+    def __init__(self, api_key, settings):
         self._api_key = api_key
-        self._settings = yaml.load(open(settings_yml_path), yaml.Loader)
+        self._settings = settings
 
     def get_response(self, dialog_history):
         def messages():

@@ -20,26 +20,35 @@ def participate(request):
     participant = request.args.get('participant')
     if participant:
         current_state = global_state.participants[participant]['state']
-        if current_state == 'chat':
+        if current_state in ['pre_chat_assess', 'chat']:
             return chat(participant)
 
     template = env.get_template('general.html')
     return template.render(participant=participant, url_for=url_for)
 
 
-def proceed(participant, session_id):
+def proceed(participant, cases, session_id):
     current_state = global_state.participants[participant]['state']
     logger.info(f'current state: {current_state}')
     state_machine = ParticipationStateMachine(Model(current_state))
     state_machine.proceed()
     new_state = state_machine.current_state.name
+    if new_state == 'select_case':
+        if cases is None:
+            new_state = 'chat'
+        else:
+            case_index = global_state.participants[participant]['random_case_indexes'][
+                global_state.participants[participant]['case_count']]
+            case = cases.iloc[case_index]
+            logger.info('case', {'participant': participant, 'case': case.to_dict()})
+            new_state = 'pre_chat_assess'
     logger.info(f'state after proceeding: {new_state}')
     global_state.participants[participant]['state'] = new_state
     send_update_to_client(participant, new_state)
 
 
 def send_update_to_client(participant, state):
-    if state == 'chat':
+    if state in ['pre_chat_assess', 'chat']:
         emit('redirect', {'href': '?participant=' + participant})
     else:
         template = env.get_template('content.html')
