@@ -37,7 +37,7 @@ def proceed(participant, cases, session_id):
         if cases is None:
             new_state = 'chat'
         else:
-            case_index = global_state.participants[participant]['random_case_indexes'][
+            case_index = global_state.participants[participant]['shuffled_case_indexes'][
                 global_state.participants[participant]['case_count']]
             case = cases.iloc[case_index]
             logger.info('case', {'participant': participant, 'case': case.to_dict()})

@@ -92,7 +92,7 @@ def start():
     }
     if cases is not None:
         num_cases = len(cases.index)
-        global_state.participants[participant]['random_case_indexes'] = np.random.choice(num_cases, size=num_cases)
+        global_state.participants[participant]['shuffled_case_indexes'] = np.random.choice(num_cases, size=num_cases)
         global_state.participants[participant]['case_count'] = 0
     return participant
 
