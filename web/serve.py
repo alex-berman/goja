@@ -78,7 +78,7 @@ def status():
 
 @app.route("/", methods=['POST', 'GET'])
 def participate():
-    return participation.participate.participate(request)
+    return participation.participate.participate(request, cases is not None)
 
 
 @socketio.on('start')

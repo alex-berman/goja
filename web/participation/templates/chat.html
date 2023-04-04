@@ -20,11 +20,13 @@ participant = '{{ participant }}';
 <div class="page">
     <table style="height:100%">
         <tr>
+{% if cases_enabled %}
             <td id="case_info_container">
                 <div id="case_info">
                     case info goes here
                 </div>
             </td>
+{% endif %}
             <td class="chat_container">
                 <div id="chat_history"></div>
                 <div id="chat_input_div">

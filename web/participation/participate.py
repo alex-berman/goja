@@ -16,12 +16,12 @@ def create_participant_id():
     return str(uuid.uuid4())
 
 
-def participate(request):
+def participate(request, cases):
     participant = request.args.get('participant')
     if participant:
         current_state = global_state.participants[participant]['state']
         if current_state in ['pre_chat_assess', 'chat']:
-            return chat(participant)
+            return chat(participant, cases)
 
     template = env.get_template('general.html')
     return template.render(participant=participant, url_for=url_for)
@@ -62,6 +62,6 @@ def handle_request_for_content(participant):
     send_update_to_client(participant, current_state)
 
 
-def chat(participant):
+def chat(participant, cases_enabled):
     template = env.get_template('chat.html')
-    return template.render(participant=participant)
+    return template.render(participant=participant, cases_enabled=cases_enabled)
