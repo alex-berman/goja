@@ -50,7 +50,7 @@ function formatUtterance(utterance) {
   }
 }
 
-function initializeChat() {
+function initializeInteraction() {
     document.getElementById('chat_input').focus();
     chatHistoryDiv = document.getElementById('chat_history');
     socket.emit('request_chat_history', { participant: participant });

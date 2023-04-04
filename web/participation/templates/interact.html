@@ -7,24 +7,22 @@
 <title>Chat experiment</title>
 <script src="static/socket.io.min.js"></script>
 <script src="static/socket.js"></script>
-<script src="static/chat.js"></script>
+<script src="static/interact.js"></script>
 <script>
 role = 'respondent';
 participant = '{{ participant }}';
 </script>
-<link rel="stylesheet" href="static/chat.css">
+<link rel="stylesheet" href="static/interact.css">
 </head>
 
-<body onLoad="initializeChat()">
+<body onLoad="initializeInteraction()">
 
 <div class="page">
     <table style="height:100%">
         <tr>
 {% if cases_enabled %}
             <td id="case_info_container">
-                <div id="case_info">
-                    case info goes here
-                </div>
+                <div id="case_info"></div>
             </td>
 {% endif %}
             <td class="chat_container">

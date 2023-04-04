@@ -63,5 +63,5 @@ def handle_request_for_content(participant):
 
 
 def chat(participant, cases_enabled):
-    template = env.get_template('chat.html')
+    template = env.get_template('interact.html')
     return template.render(participant=participant, cases_enabled=cases_enabled)
