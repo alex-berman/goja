@@ -53,8 +53,26 @@ function formatUtterance(utterance) {
 function initializeInteraction() {
     document.getElementById('chat_input').focus();
     chatHistoryDiv = document.getElementById('chat_history');
-    socket.emit('request_chat_history', { participant: participant });
+    socket.emit('get_state', { participant: participant });
 }
+
+socket.on('state', (state) => {
+    console.log('state:');
+    console.log(state);
+    if(state == 'pre_chat_assess') {
+      socket.emit('get_case_info', { participant: participant });
+    }
+    else if(state == 'chat') {
+      socket.emit('request_chat_history', { participant: participant });
+    }
+});
+
+socket.on('case_info', (case_info) => {
+    console.log('case_info:');
+    console.log(case_info);
+    var caseInfoDiv = document.getElementById('case_info_div');
+    caseInfoDiv.innerHTML = caseInfoAsHTML(case_info);
+});
 
 function handleKeyPress(e) {
     var code = (e.keyCode ? e.keyCode : e.which);

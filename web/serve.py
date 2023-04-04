@@ -78,7 +78,7 @@ def status():
 
 @app.route("/", methods=['POST', 'GET'])
 def participate():
-    return participation.participate.participate(request, cases is not None)
+    return participation.participate.participate(request, settings)
 
 
 @socketio.on('start')
@@ -133,6 +133,23 @@ def handle_utterance(payload):
     participant = payload['participant']
     utterance = payload['utterance']
     return dialog.chat.handle_utterance(participant, utterance, bot, socketio)
+
+
+@socketio.on('get_state')
+def update_session(payload):
+    logger.info('get_state', payload=payload)
+    participant = payload['participant']
+    socketio.emit('state', global_state.participants[participant]['state'], to=request.sid)
+
+
+@socketio.on('get_case_info')
+def update_session(payload):
+    logger.info('get_case_info', payload=payload)
+    participant = payload['participant']
+    case_index = global_state.participants[participant]['shuffled_case_indexes'][
+        global_state.participants[participant]['case_count']]
+    case = cases.iloc[case_index]
+    socketio.emit('case_info', case.to_dict(), to=request.sid)
 
 
 if __name__ == '__main__':
