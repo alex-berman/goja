@@ -1,0 +1,22 @@
+.caseInfoCell {
+  vertical-align: top;
+}
+
+.optionFeatureDescription {
+  padding-top: 5px;
+}
+
+.option {
+  width: 200px;
+  border: 1px solid;
+  border-radius: 5px;
+  border-color: #aaa;
+  color: #aaa;
+  padding: 5px;
+  margin-bottom: 5px;
+}
+
+.highlighted {
+  border-color: black;
+  color: black;
+}

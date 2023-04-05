@@ -4,28 +4,42 @@ const genders = {
 };
 
 const chestPainTypes = {
-  1: 'typical angina',
-  2: 'atypical angina',
-  3: 'non-anginal pain',
-  4: 'asymptomatic',
+  1: 'Typical angina',
+  2: 'Atypical angina',
+  3: 'Non-anginal pain',
+  4: 'Asymptomatic',
 };
 
 function caseInfoAsHTML(case_info) {
   var result = '<table>';
-  result += tableRow('Age', case_info.age);
-  result += tableRow('Gender', lookup(genders, case_info.sex));
-  result += tableRow('Chest pain', lookup(chestPainTypes, case_info.cp));
-  result += '</tabke>';
+  result += nonOptionRow('Age', case_info.age);
+  result += optionRow('Gender', genders, case_info.sex);
+  result += optionRow('Chest pain', chestPainTypes, case_info.cp);
+  result += '</table>';
   return result;
 }
 
-function lookup(table, value) {
-  if(table.hasOwnProperty(value)) {
-    return table[value];
-  }
-  return 'N/A';
+function nonOptionRow(featureDescription, value) {
+  return tableRow(featureDescription, 'nonOptionFeatureDescription', value);
 }
 
-function tableRow(featureDescription, generatedFeatureValue) {
-  return '<tr><td>' + featureDescription + '</td><td>' + generatedFeatureValue + '</td></tr>';
+function optionRow(featureDescription, options, highlightedValue) {
+  return tableRow(featureDescription, 'optionFeatureDescription', optionsAsHTML(options, highlightedValue));
+}
+
+function optionsAsHTML(options, highlightedValue) {
+  var result = '';
+  for (const [value, description] of Object.entries(options)) {
+    var className = "option";
+    if (value == highlightedValue) {
+      className += " highlighted";
+    }
+    result += '<div class="' + className + '">' + description + '</div>';
+  }
+  return result;
+}
+
+function tableRow(featureDescription, featureDescriptionClass, generatedFeatureValue) {
+  return '<tr><td class="caseInfoCell ' + featureDescriptionClass + '">' + featureDescription +
+    '</td><td class="caseInfoCell">' + generatedFeatureValue + '</td></tr>';
 }
