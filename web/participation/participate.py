@@ -72,4 +72,8 @@ def interact(participant, settings):
     if 'frontend_css' in settings:
         extra_head_js += f'<link rel="stylesheet" href="{settings["frontend_css"]}">\n'
 
-    return template.render(participant=participant, cases_enabled=cases_enabled, extra_head_js=extra_head_js)
+    return template.render(
+        participant=participant,
+        cases_enabled=cases_enabled,
+        extra_head_js=extra_head_js,
+        settings=settings)

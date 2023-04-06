@@ -14,7 +14,6 @@ html *
 #case_info_container {
     vertical-align: top;
     width: 480;
-    top: 0;
 }
 
 #case_info {
@@ -25,7 +24,8 @@ html *
     margin-right: 15px;
 }
 
-.chat_container {
+#chat_container {
+    visibility: hidden;
     width: 400;
     height: 100%;
     border: 2px solid #eee;
@@ -89,4 +89,34 @@ html *
 
 .utterance {
     padding: 10px;
+}
+
+#case_assessment_div {
+  visibility: hidden;
+  width: 400;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 20px;
+  background-color: #eee;
+}
+
+.case_assessment_option {
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    background-color: #f8f8f8;
+    text-align: center;
+    width: 250px;
+    padding: 10;
+    margin: 5;
+    cursor: pointer;
+    color: #444;
+}
+
+.case_assessment_option_selected {
+    cursor: default;
+    background-color: white;
+    border: 2px solid black;
+    color: black;
+    font-weight: bold;
 }

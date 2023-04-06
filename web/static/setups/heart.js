@@ -73,8 +73,6 @@ function caseInfoAsHTML(case_info) {
   result += optionRow('Thallium scintigraphic defect', thalOptions, case_info.thal);
   result += optionRow('Major vessels colored by flouroscopy', caOptions, case_info.ca);
 
-  // fluoroscopy for coronary calcium
-
   result += '</table>';
   return result;
 }

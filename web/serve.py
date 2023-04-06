@@ -92,7 +92,8 @@ def start():
     logger.info('add_participant', participant=participant)
     global_state.participants[participant] = {
         'state': ParticipationStateMachine().current_state.name,
-        'dialog_history': []
+        'dialog_history': [],
+        'assessments': {}
     }
     if cases is not None:
         num_cases = len(cases.index)
@@ -150,10 +151,35 @@ def update_session(payload):
 def update_session(payload):
     logger.info('get_case_info', payload=payload)
     participant = payload['participant']
+    send_case_info(participant, request.sid)
+
+
+def send_case_info(participant, session_id):
     case_index = global_state.participants[participant]['shuffled_case_indexes'][
         global_state.participants[participant]['case_count']]
     case = cases.iloc[case_index]
-    socketio.emit('case_info', case.to_dict(), to=request.sid)
+    payload = {
+        'info': case.to_dict(),
+        'assessment': get_assessment(participant, case_index)
+    }
+    socketio.emit('case_info', payload, to=session_id)
+
+
+def get_assessment(participant, case_index):
+    assessments = global_state.participants[participant]['assessments']
+    if case_index in assessments:
+        return assessments[case_index]
+
+
+@socketio.on('update_assessment')
+def update_assessment(payload):
+    logger.info('update_assessment', payload=payload)
+    participant = payload['participant']
+    label = payload['assessment']
+    case_index = global_state.participants[participant]['shuffled_case_indexes'][
+        global_state.participants[participant]['case_count']]
+    global_state.participants[participant]['assessments'][case_index] = label
+    send_case_info(participant, request.sid)
 
 
 if __name__ == '__main__':

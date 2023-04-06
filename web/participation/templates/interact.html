@@ -12,6 +12,7 @@
 <script>
 role = 'respondent';
 participant = '{{ participant }}';
+assessmentLabels = {{ settings['target']['labels'] }};
 </script>
 <link rel="stylesheet" href="static/interact.css">
 </head>
@@ -24,9 +25,19 @@ participant = '{{ participant }}';
 {% if cases_enabled %}
             <td id="case_info_container">
                 <div id="case_info_div"></div>
+                <div id="case_assessment_div" align="center">
+                    <div class="case_assessment_title">Assessment</div>
+                    <div class="case_assessment_description">{{ settings['target']['description'] }}</div>
+{% for label in settings['target']['labels'] %}
+                    <div id="case_assessment_option_{{ label }}"
+                         class="case_assessment_option"
+                         onClick="selectCaseAssessmentOption({{ label }})"
+                    >{{ settings['target']['labels'][label] }}</div>
+{% endfor %}
+                </div>
             </td>
 {% endif %}
-            <td class="chat_container">
+            <td id="chat_container">
                 <div id="chat_history"></div>
                 <div id="chat_input_div">
                   <textarea id="chat_input" onkeypress="handleKeyPress(event, this)"></textarea>

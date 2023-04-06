@@ -10,7 +10,9 @@ socket.on('connect', function() {
 });
 
 var roleOfPreviousUtterance;
+var chatContainer;
 var chatHistoryDiv;
+var caseAssessmentDiv;
 
 socket.on('utterance', (utterance_info) => {
     console.log('utterance:');
@@ -52,7 +54,9 @@ function formatUtterance(utterance) {
 
 function initializeInteraction() {
     document.getElementById('chat_input').focus();
+    chatContainer = document.getElementById('chat_container');
     chatHistoryDiv = document.getElementById('chat_history');
+    caseAssessmentDiv = document.getElementById('case_assessment_div');
     socket.emit('get_state', { participant: participant });
 }
 
@@ -60,18 +64,22 @@ socket.on('state', (state) => {
     console.log('state:');
     console.log(state);
     if(state == 'pre_chat_assess') {
+      chatContainer.style.visibility = 'hidden';
       socket.emit('get_case_info', { participant: participant });
     }
     else if(state == 'chat') {
+      chatContainer.style.visibility = 'visible';
       socket.emit('request_chat_history', { participant: participant });
     }
 });
 
-socket.on('case_info', (case_info) => {
+socket.on('case_info', (payload) => {
     console.log('case_info:');
-    console.log(case_info);
+    console.log(payload);
     var caseInfoDiv = document.getElementById('case_info_div');
-    caseInfoDiv.innerHTML = caseInfoAsHTML(case_info);
+    caseInfoDiv.innerHTML = caseInfoAsHTML(payload.info);
+    caseAssessmentDiv.style.visibility = 'visible';
+    updateAssessmentOptions(payload.assessment);
 });
 
 function handleKeyPress(e) {
@@ -89,4 +97,18 @@ function handleKeyPress(e) {
 
 function clearChatInput() {
     document.getElementById('chat_input').value = '';
+}
+
+function selectCaseAssessmentOption(label) {
+  socket.emit('update_assessment', {
+      participant: participant,
+      assessment: label
+  });
+}
+
+function updateAssessmentOptions(selectedLabel) {
+    for (var label in assessmentLabels) {
+      var div = document.getElementById('case_assessment_option_' + label);
+      div.className = (label == selectedLabel) ? 'case_assessment_option case_assessment_option_selected' : 'case_assessment_option';
+    };
 }
