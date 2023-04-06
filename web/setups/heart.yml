@@ -1,7 +1,9 @@
 # based on https://github.com/MLforHealth/predictive_checklists/
 model: gpt-3.5-turbo
 temperature: 0
-cases: datasets/heart.csv
+cases:
+  file: datasets/processed.cleveland.data
+  columns: [ 'age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal', 'target' ]
 frontend_javascript: static/setups/heart.js
 frontend_css: static/setups/heart.css
 prompt: |

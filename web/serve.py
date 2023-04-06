@@ -31,7 +31,11 @@ if __name__ == '__main__':
     settings = yaml.load(open(args.settings), yaml.Loader)
     bot = Bot(openai_api_key, settings)
     if 'cases' in settings:
-        cases = pd.read_csv(settings['cases'])
+        if 'columns' in settings['cases']:
+            names = settings['cases']['columns']
+        else:
+            names = None
+        cases = pd.read_csv(settings['cases']['file'], names=names)
 
 
 logging.config.dictConfig({

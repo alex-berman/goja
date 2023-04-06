@@ -10,19 +10,30 @@ const chestPainTypes = {
   4: 'Asymptomatic',
 };
 
+const fbsOptions = {
+  0.0: '<= 120 mg/dl',
+  1.0: '> 120 mg/dl',
+};
+
+
 function caseInfoAsHTML(case_info) {
   var result = '<table>';
 
-  // Clinical variables
+  // CLINICAL DATA
+
   result += nonOptionRow('Age', case_info.age);
   result += optionRow('Sex', sexes, case_info.sex);
   result += optionRow('Chest pain', chestPainTypes, case_info.cp);
   result += nonOptionRow('Systolic blood pressure', case_info.trestbps);
 
-  // Electrocardiogram
-
+  // TEST DATA
+  result += nonOptionRow('Serum cholesterol (mg/dl)', case_info.chol);
+  result += optionRow('Fasting blood sugar', fbsOptions, case_info.fbs);
+  //
+  // fasting blood sugar >120 mg/dl
+  // electrocardiographic results at rest
+  // Exercise electrocardiogram
   // Exercise thallium scintigraphy
-
   // fluoroscopy for coronary calcium
 
   result += '</table>';
