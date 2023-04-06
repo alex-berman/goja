@@ -38,14 +38,12 @@ function optionRow(featureDescription, options, highlightedValue) {
 }
 
 function optionsAsHTML(options, highlightedValue) {
-  var result = '';
+  var result = '<select>';
   for (const [value, description] of Object.entries(options)) {
-    var className = "option";
-    if (value == highlightedValue) {
-      className += " highlighted";
-    }
-    result += '<div class="' + className + '">' + description + '</div>';
+    var attribute = (value == highlightedValue) ? "selected" : "disabled";
+    result += '<option ' + attribute + '>' + description;
   }
+  result += '</select>';
   return result;
 }
 
