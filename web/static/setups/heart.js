@@ -11,32 +11,86 @@ const chestPainTypes = {
 };
 
 const fbsOptions = {
-  0.0: '<= 120 mg/dl',
-  1.0: '> 120 mg/dl',
+  0: '<= 120 mg/dl',
+  1: '> 120 mg/dl',
+};
+
+const restecgOptions = {
+  0: 'Normal',
+  1: 'ST-T wave abnormality',
+  2: 'Left ventricular hypertrophy',
+};
+
+const yesOrNo = {
+  1: 'Yes',
+  0: 'No',
+};
+
+const slopeOptions = {
+  1: 'Opsloping',
+  2: 'Flat',
+  3: 'Downsloping',
+};
+
+const thalOptions = {
+  '3.0': 'None',
+  '6.0': 'Fixed',
+  '7.0': 'Reversable',
+  '?': 'N/A',
+};
+
+const caOptions = {
+  '0.0': '0',
+  '1.0': '1',
+  '2.0': '2',
+  '3.0': '3',
+  '?': 'N/A',
 };
 
 
 function caseInfoAsHTML(case_info) {
   var result = '<table>';
 
-  // CLINICAL DATA
-
+  result += header('Clinical data');
   result += nonOptionRow('Age', case_info.age);
   result += optionRow('Sex', sexes, case_info.sex);
   result += optionRow('Chest pain', chestPainTypes, case_info.cp);
   result += nonOptionRow('Systolic blood pressure', case_info.trestbps);
 
-  // TEST DATA
+  result += header('Test data', 'padding-top: 20px');
   result += nonOptionRow('Serum cholesterol (mg/dl)', case_info.chol);
   result += optionRow('Fasting blood sugar', fbsOptions, case_info.fbs);
-  //
-  // fasting blood sugar >120 mg/dl
-  // electrocardiographic results at rest
-  // Exercise electrocardiogram
-  // Exercise thallium scintigraphy
+  result += optionRow('ECG at rest', restecgOptions, case_info.restecg);
+
+  result += subHeader('Exercise', 'padding-top: 10px');
+  result += nonOptionRow('Maximum heart rate', case_info.thalach);
+  result += optionRow('Exercise-induced angina', yesOrNo, case_info.exang);
+  result += optionRow('Slope of peak ST segment', slopeOptions, case_info.slope);
+  result += nonOptionRow('ST depression relative to rest', case_info.oldpeak);
+  result += optionRow('Thallium scintigraphic defect', thalOptions, case_info.thal);
+  result += optionRow('No. of major vessels colored by flouroscopy', caOptions, case_info.ca);
+
   // fluoroscopy for coronary calcium
 
   result += '</table>';
+  return result;
+}
+
+function header(title, style) {
+  var result = '<tr><td colspan=2 class="caseInfoHeader"';
+  if(style) {
+    result += ' style="' + style + '"';
+  }
+  result += '>' + title + '</td></tr>';
+  return result;
+}
+
+function subHeader(title, style) {
+  var result = '<tr><td colspan=2 class="caseInfoSubHeader"';
+  if(style) {
+    result += ' style="' + style + '"';
+  }
+  result += '>' + title + '</td></tr>';
   return result;
 }
 

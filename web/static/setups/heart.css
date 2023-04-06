@@ -10,3 +10,11 @@ select {
   border-color: black;
   color: black;
 }
+
+.caseInfoHeader {
+  font-size: 120%;
+}
+
+.caseInfoSubHeader {
+  font-style: italic;
+}
