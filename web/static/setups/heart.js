@@ -1,4 +1,4 @@
-const genders = {
+const sexes = {
   1: 'Male',
   0: 'Female',
 };
@@ -12,9 +12,19 @@ const chestPainTypes = {
 
 function caseInfoAsHTML(case_info) {
   var result = '<table>';
+
+  // Clinical variables
   result += nonOptionRow('Age', case_info.age);
-  result += optionRow('Gender', genders, case_info.sex);
+  result += optionRow('Sex', sexes, case_info.sex);
   result += optionRow('Chest pain', chestPainTypes, case_info.cp);
+  result += nonOptionRow('Systolic blood pressure', case_info.trestbps);
+
+  // Electrocardiogram
+
+  // Exercise thallium scintigraphy
+
+  // fluoroscopy for coronary calcium
+
   result += '</table>';
   return result;
 }
