@@ -27,7 +27,7 @@ const yesOrNo = {
 };
 
 const slopeOptions = {
-  1: 'Opsloping',
+  1: 'Upsloping',
   2: 'Flat',
   3: 'Downsloping',
 };
