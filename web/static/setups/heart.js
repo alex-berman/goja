@@ -47,6 +47,8 @@ const caOptions = {
   '?': 'N/A',
 };
 
+const border = '<tr><td colspan=2 style="padding-top: 10px; border-bottom: 1px solid #ccc;"></td></tr>';
+
 
 function caseInfoAsHTML(case_info) {
   var result = '<table>';
@@ -57,7 +59,8 @@ function caseInfoAsHTML(case_info) {
   result += optionRow('Chest pain', chestPainTypes, case_info.cp);
   result += nonOptionRow('Systolic blood pressure', case_info.trestbps);
 
-  result += header('Test data', 'padding-top: 20px');
+  result += border;
+  result += header('Test data', 'padding-top: 10px;');
   result += nonOptionRow('Serum cholesterol (mg/dl)', case_info.chol);
   result += optionRow('Fasting blood sugar', fbsOptions, case_info.fbs);
   result += optionRow('ECG at rest', restecgOptions, case_info.restecg);
@@ -65,10 +68,10 @@ function caseInfoAsHTML(case_info) {
   result += subHeader('Exercise', 'padding-top: 10px');
   result += nonOptionRow('Maximum heart rate', case_info.thalach);
   result += optionRow('Exercise-induced angina', yesOrNo, case_info.exang);
-  result += optionRow('Slope of peak ST segment', slopeOptions, case_info.slope);
+  result += optionRow('Peak ST segment', slopeOptions, case_info.slope);
   result += nonOptionRow('ST depression relative to rest', case_info.oldpeak);
   result += optionRow('Thallium scintigraphic defect', thalOptions, case_info.thal);
-  result += optionRow('No. of major vessels colored by flouroscopy', caOptions, case_info.ca);
+  result += optionRow('Major vessels colored by flouroscopy', caOptions, case_info.ca);
 
   // fluoroscopy for coronary calcium
 
