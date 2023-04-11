@@ -147,22 +147,23 @@ def update_session(payload):
     socketio.emit('state', global_state.participants[participant]['state'], to=request.sid)
 
 
-@socketio.on('get_case_info')
-def update_session(payload):
-    logger.info('get_case_info', payload=payload)
+@socketio.on('get_case')
+def get_case(payload):
+    logger.info('get_case', payload=payload)
     participant = payload['participant']
-    send_case_info(participant, request.sid)
+    send_case(participant, request.sid)
 
 
-def send_case_info(participant, session_id):
+def send_case(participant, session_id):
     case_index = global_state.participants[participant]['shuffled_case_indexes'][
         global_state.participants[participant]['case_count']]
     case = cases.iloc[case_index]
     payload = {
-        'info': case.to_dict(),
+        'index': int(case_index),
+        'features': case.to_dict(),
         'assessment': get_assessment(participant, case_index)
     }
-    socketio.emit('case_info', payload, to=session_id)
+    socketio.emit('case', payload, to=session_id)
 
 
 def get_assessment(participant, case_index):
@@ -179,7 +180,7 @@ def update_assessment(payload):
     case_index = global_state.participants[participant]['shuffled_case_indexes'][
         global_state.participants[participant]['case_count']]
     global_state.participants[participant]['assessments'][case_index] = label
-    send_case_info(participant, request.sid)
+    send_case(participant, request.sid)
 
 
 if __name__ == '__main__':

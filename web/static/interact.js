@@ -65,7 +65,7 @@ socket.on('state', (state) => {
     console.log(state);
     if(state == 'pre_chat_assess') {
       chatContainer.style.visibility = 'hidden';
-      socket.emit('get_case_info', { participant: participant });
+      socket.emit('get_case', { participant: participant });
     }
     else if(state == 'chat') {
       chatContainer.style.visibility = 'visible';
@@ -73,13 +73,14 @@ socket.on('state', (state) => {
     }
 });
 
-socket.on('case_info', (payload) => {
-    console.log('case_info:');
+socket.on('case', (payload) => {
+    console.log('case:');
     console.log(payload);
     var caseInfoDiv = document.getElementById('case_info_div');
-    caseInfoDiv.innerHTML = caseInfoAsHTML(payload.info);
+    currentCase = payload;
+    caseInfoDiv.innerHTML = caseInfoAsHTML(currentCase.features);
     caseAssessmentDiv.style.visibility = 'visible';
-    updateAssessmentOptions(payload.assessment);
+    updateAssessmentOptions(currentCase.assessment);
 });
 
 function handleKeyPress(e) {
@@ -102,6 +103,7 @@ function clearChatInput() {
 function selectCaseAssessmentOption(label) {
   socket.emit('update_assessment', {
       participant: participant,
+      case_index: currentCase.index,
       assessment: label
   });
 }
