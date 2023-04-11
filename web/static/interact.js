@@ -120,4 +120,15 @@ function updateAssessmentOptions(selectedLabel) {
 function updateNavigation() {
   var div = document.getElementById('caseCountIndicator');
   div.innerHTML = 'Case ' + currentCase.count + ' / ' + numCases;
+  var buttonPrevious = document.getElementById('buttonPrevious');
+  buttonPrevious.disabled = (currentCase.count <= 1);
+  var buttonNext = document.getElementById('buttonNext');
+  buttonNext.disabled = !currentCase || currentCase.assessment === null;
+}
+
+function proceedWithinCases(step) {
+  socket.emit('proceed_within_cases', {
+      participant: participant,
+      step: step
+  });
 }

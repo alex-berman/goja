@@ -184,5 +184,20 @@ def update_assessment(payload):
     send_case(participant, request.sid)
 
 
+@socketio.on('proceed_within_cases')
+def proceed_within_cases(payload):
+    logger.info('proceed_within_cases', payload=payload)
+    participant = payload['participant']
+    case_count = global_state.participants[participant]['case_count']
+    new_case_count = case_count + payload['step']
+    if new_case_count >= settings['cases']['n']:
+        participation.participate.proceed(participant, cases, request.sid)
+    else:
+        if new_case_count < 0:
+            new_case_count = 0
+        global_state.participants[participant]['case_count'] = new_case_count
+        send_case(participant, request.sid)
+
+
 if __name__ == '__main__':
     socketio.run(app, host=args.host, port=args.port)

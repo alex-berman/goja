@@ -39,9 +39,9 @@ numCases = '{{ settings['cases']['n'] }}';
                 <div id="navigation">
                     <table width="100%">
                         <tr>
-                            <td align="left"><div class="navigationButtonDisabled">Previous</div></td>
+                            <td align="left"><button id="buttonPrevious" class="navigationButton" onClick="proceedWithinCases(-1)" disabled>Previous</button></td>
                             <td align="center"><div id="caseCountIndicator"></div></td>
-                            <td align="right"><div class="navigationButtonDisabled">Next</div></td>
+                            <td align="right"><button id="buttonNext" class="navigationButton" onClick="proceedWithinCases(1)" disabled>Next</button></td>
                         </tr>
                     </table>
                 </div>
