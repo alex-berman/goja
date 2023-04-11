@@ -1,9 +1,15 @@
-.caseInfoCell {
+.caseInfoFeatureDescription {
+  width: 280px;
+  vertical-align: top;
+}
+
+.caseInfoFeatureValue {
+  width: 200px;
   vertical-align: top;
 }
 
 select {
-  width: 200px;
+  width: 100%;
 }
 
 .highlighted {

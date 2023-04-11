@@ -114,6 +114,6 @@ function optionsAsHTML(options, highlightedValue) {
 }
 
 function tableRow(featureDescription, featureDescriptionClass, generatedFeatureValue) {
-  return '<tr><td class="caseInfoCell ' + featureDescriptionClass + '">' + featureDescription +
-    '</td><td class="caseInfoCell">' + generatedFeatureValue + '</td></tr>';
+  return '<tr><td class="caseInfoFeatureDescription ' + featureDescriptionClass + '">' + featureDescription +
+    '</td><td class="caseInfoFeatureValue">' + generatedFeatureValue + '</td></tr>';
 }

@@ -93,12 +93,17 @@ html *
 
 #case_assessment_div {
   visibility: hidden;
-  width: 400;
+  width: (100% - 20px);
   border: 1px solid #ccc;
   border-radius: 10px;
   padding: 10px;
   margin-top: 20px;
   background-color: #eee;
+}
+
+#navigation {
+  width: 480px;
+  margin-top: 20px;
 }
 
 .case_assessment_option {
@@ -119,4 +124,14 @@ html *
     border: 2px solid black;
     color: black;
     font-weight: bold;
+}
+
+.navigationButtonDisabled {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f8f8f8;
+    padding: 10;
+    color: #aaa;
+    width: 100px;
+    text-align: center;
 }

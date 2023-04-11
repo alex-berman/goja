@@ -13,6 +13,7 @@
 role = 'respondent';
 participant = '{{ participant }}';
 assessmentLabels = {{ settings['target']['labels'] }};
+numCases = '{{ settings['cases']['n'] }}';
 </script>
 <link rel="stylesheet" href="static/interact.css">
 </head>
@@ -35,6 +36,15 @@ assessmentLabels = {{ settings['target']['labels'] }};
                     >{{ settings['target']['labels'][label] }}</div>
 {% endfor %}
                 </div>
+                <div id="navigation">
+                    <table width="100%">
+                        <tr>
+                            <td align="left"><div class="navigationButtonDisabled">Previous</div></td>
+                            <td align="center"><div id="caseCountIndicator"></div></td>
+                            <td align="right"><div class="navigationButtonDisabled">Next</div></td>
+                        </tr>
+                    </table>
+                </div>
             </td>
 {% endif %}
             <td id="chat_container">
@@ -45,7 +55,6 @@ assessmentLabels = {{ settings['target']['labels'] }};
             </td>
         </tr>
     </table>
-
 </div>
 
 </body>

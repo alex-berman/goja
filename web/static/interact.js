@@ -13,6 +13,7 @@ var roleOfPreviousUtterance;
 var chatContainer;
 var chatHistoryDiv;
 var caseAssessmentDiv;
+var numCases;
 
 socket.on('utterance', (utterance_info) => {
     console.log('utterance:');
@@ -81,6 +82,7 @@ socket.on('case', (payload) => {
     caseInfoDiv.innerHTML = caseInfoAsHTML(currentCase.features);
     caseAssessmentDiv.style.visibility = 'visible';
     updateAssessmentOptions(currentCase.assessment);
+    updateNavigation();
 });
 
 function handleKeyPress(e) {
@@ -113,4 +115,9 @@ function updateAssessmentOptions(selectedLabel) {
       var div = document.getElementById('case_assessment_option_' + label);
       div.className = (label == selectedLabel) ? 'case_assessment_option case_assessment_option_selected' : 'case_assessment_option';
     };
+}
+
+function updateNavigation() {
+  var div = document.getElementById('caseCountIndicator');
+  div.innerHTML = 'Case ' + currentCase.count + ' / ' + numCases;
 }

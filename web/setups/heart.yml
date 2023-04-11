@@ -5,6 +5,7 @@ temperature: 0
 cases:
   file: datasets/processed.cleveland.data
   columns: [ 'age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal', 'target' ]
+  n: 5
 target:
   description: "Patient has coronary artery disease:"
   labels:

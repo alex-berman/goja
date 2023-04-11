@@ -155,10 +155,11 @@ def get_case(payload):
 
 
 def send_case(participant, session_id):
-    case_index = global_state.participants[participant]['shuffled_case_indexes'][
-        global_state.participants[participant]['case_count']]
+    case_count = global_state.participants[participant]['case_count']
+    case_index = global_state.participants[participant]['shuffled_case_indexes'][case_count]
     case = cases.iloc[case_index]
     payload = {
+        'count': case_count + 1,
         'index': int(case_index),
         'features': case.to_dict(),
         'assessment': get_assessment(participant, case_index)
