@@ -9,6 +9,10 @@ socket.on('connect', function() {
     socket.emit('update_session', { participant: participant });
 });
 
+socket.on('redirect', (args) => {
+    location.href = args.href;
+});
+
 var roleOfPreviousUtterance;
 var chatContainer;
 var chatHistoryDiv;
@@ -64,12 +68,13 @@ function initializeInteraction() {
 socket.on('state', (state) => {
     console.log('state:');
     console.log(state);
-    if(state == 'pre_chat_assess') {
+    if(state == 'assess_without_bot') {
       chatContainer.style.visibility = 'hidden';
       socket.emit('get_case', { participant: participant });
     }
-    else if(state == 'chat') {
+    else if(state == 'assess_with_bot') {
       chatContainer.style.visibility = 'visible';
+      socket.emit('get_case', { participant: participant });
       socket.emit('request_chat_history', { participant: participant });
     }
 });

@@ -3,12 +3,16 @@ from statemachine import StateMachine, State
 
 class ParticipationStateMachine(StateMachine):
     briefing = State('briefing', initial=True)
-    before_without_bot = State('before_without_bot')
-    select_case = State('select_case')
-    pre_chat_assess = State('pre_chat_assess')
-    chat = State('chat')
+    before_assess_without_bot = State('before_assess_without_bot')
+    assess_without_bot = State('assess_without_bot')
+    before_assess_with_bot = State('before_assess_with_bot')
+    assess_with_bot = State('assess_with_bot')
 
-    proceed = briefing.to(before_without_bot) | before_without_bot.to(select_case) | select_case.to(pre_chat_assess) | pre_chat_assess.to(chat)
+    proceed = \
+        briefing.to(before_assess_without_bot) | \
+        before_assess_without_bot.to(assess_without_bot) | \
+        assess_without_bot.to(before_assess_with_bot) | \
+        before_assess_with_bot.to(assess_with_bot)
 
 
 class Model(object):

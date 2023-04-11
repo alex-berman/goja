@@ -20,9 +20,11 @@ def participate(request):
     participant = request.args.get('participant')
     if participant:
         current_state = global_state.participants[participant]['state']
-        if current_state in ['pre_chat_assess', 'chat']:
+        if current_state in ['assess_without_bot', 'assess_with_bot']:
+            logger.info('returning interaction page')
             return interact(participant)
 
+    logger.info('returning information page')
     template = env.get_template('general.html')
     return template.render(participant=participant, settings=settings, url_for=url_for)
 
@@ -33,33 +35,30 @@ def proceed(participant, cases, session_id):
     state_machine = ParticipationStateMachine(Model(current_state))
     state_machine.proceed()
     new_state = state_machine.current_state.name
-    if new_state == 'select_case':
-        if cases is None:
-            new_state = 'chat'
-        else:
-            case_index = global_state.participants[participant]['shuffled_case_indexes'][
-                global_state.participants[participant]['case_count']]
-            case = cases.iloc[case_index]
-            logger.info('case', {'participant': participant, 'case': case.to_dict()})
-            new_state = 'pre_chat_assess'
     logger.info(f'state after proceeding: {new_state}')
     global_state.participants[participant]['state'] = new_state
     send_update_to_client(participant, new_state)
 
 
 def send_update_to_client(participant, state):
-    if state in ['pre_chat_assess', 'chat']:
+    if state in ['assess_without_bot', 'before_assess_with_bot', 'assess_with_bot']:
+        logger.info('emitting redirect')
         emit('redirect', {'href': '?participant=' + participant})
     else:
-        template = env.get_template('content.html')
-        content = template.render(state=state, settings=settings)
-        emit('content', content)
+        send_content_to_client(participant, state)
+
+
+def send_content_to_client(participant, state):
+    logger.info('emitting content')
+    template = env.get_template('content.html')
+    content = template.render(state=state, settings=settings)
+    emit('content', content)
 
 
 def handle_request_for_content(participant):
-    current_state = global_state.participants[participant]['state']
-    logger.info(f'current state: {current_state}')
-    send_update_to_client(participant, current_state)
+    state = global_state.participants[participant]['state']
+    logger.info(f'current state: {state}')
+    send_content_to_client(participant, state)
 
 
 def interact(participant):

@@ -5,7 +5,7 @@ temperature: 0
 cases:
   file: datasets/processed.cleveland.data
   columns: [ 'age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal', 'target' ]
-  n: 5
+  n: 1
 target:
   description: "Patient has coronary artery disease:"
   labels:
@@ -30,10 +30,10 @@ state_specific_info:
     <p>In this experiment, you will assess whether patients suffer from coronary artery disease (CAD).</p>
     <p>The patient data used in the experiment is real, but has been anonymized.</p>
     <p>All patients have been referred to coronary angiography. Prevalence of CAD in this patient group is roughly 50%.</p>
-  before_without_bot:
+  before_assess_without_bot:
     <p>The experiment consists of two parts. In the first part, you will be presented with a number of patient cases. For
     each patient, you will be asked to assess whether the patient has CAD, on the basis of clinical data and test data.</p>
-  before_with_bot:
+  before_assess_with_bot:
     <p>In the second part, you will make the same kind of assessment. This time, however, you will be aided by a chatbot
     that has been designed specifically for assessing CAD.</p>
     <p>The chatbot does not have access to the patient data, but you may give patient data to the chatbot.
