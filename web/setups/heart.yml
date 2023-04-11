@@ -1,4 +1,5 @@
-# based on https://github.com/MLforHealth/predictive_checklists/
+# predictive model: https://github.com/MLforHealth/predictive_checklists/
+# dataset: https://archive.ics.uci.edu/ml/machine-learning-databases/heart-disease/
 model: gpt-3.5-turbo
 temperature: 0
 cases:
