@@ -16,15 +16,15 @@ def create_participant_id():
     return str(uuid.uuid4())
 
 
-def participate(request, settings):
+def participate(request):
     participant = request.args.get('participant')
     if participant:
         current_state = global_state.participants[participant]['state']
         if current_state in ['pre_chat_assess', 'chat']:
-            return interact(participant, settings)
+            return interact(participant)
 
     template = env.get_template('general.html')
-    return template.render(participant=participant, url_for=url_for)
+    return template.render(participant=participant, settings=settings, url_for=url_for)
 
 
 def proceed(participant, cases, session_id):
@@ -52,7 +52,7 @@ def send_update_to_client(participant, state):
         emit('redirect', {'href': '?participant=' + participant})
     else:
         template = env.get_template('content.html')
-        content = template.render(state=state)
+        content = template.render(state=state, settings=settings)
         emit('content', content)
 
 
@@ -62,7 +62,7 @@ def handle_request_for_content(participant):
     send_update_to_client(participant, current_state)
 
 
-def interact(participant, settings):
+def interact(participant):
     template = env.get_template('interact.html')
     cases_enabled = settings['cases'] is not None
 

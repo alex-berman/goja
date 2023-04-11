@@ -28,7 +28,7 @@ if __name__ == '__main__':
     openai_api_key = getenv('OPENAI_API_KEY')
     if openai_api_key is None:
         raise Exception('Please set the OPENAI_API_KEY environment variable')
-    settings = yaml.load(open(args.settings), yaml.Loader)
+    settings = participation.participate.settings = yaml.load(open(args.settings), yaml.Loader)
     bot = Bot(openai_api_key, settings)
     if 'cases' in settings:
         if 'columns' in settings['cases']:
@@ -82,7 +82,7 @@ def status():
 
 @app.route("/", methods=['POST', 'GET'])
 def participate():
-    return participation.participate.participate(request, settings)
+    return participation.participate.participate(request)
 
 
 @socketio.on('start')
