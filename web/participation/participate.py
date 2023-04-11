@@ -64,6 +64,8 @@ def handle_request_for_content(participant):
 def interact(participant):
     template = env.get_template('interact.html')
     cases_enabled = settings['cases'] is not None
+    state = global_state.participants[participant]['state']
+    print('state='); print(state)
 
     extra_head_js = ''
     if 'frontend_javascript' in settings:
@@ -73,6 +75,7 @@ def interact(participant):
 
     return template.render(
         participant=participant,
+        state=state,
         cases_enabled=cases_enabled,
         extra_head_js=extra_head_js,
         settings=settings)

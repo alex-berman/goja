@@ -14,7 +14,6 @@ socket.on('redirect', (args) => {
 });
 
 var roleOfPreviousUtterance;
-var chatContainer;
 var chatHistoryDiv;
 var caseAssessmentDiv;
 var numCases;
@@ -58,22 +57,19 @@ function formatUtterance(utterance) {
 }
 
 function initializeInteraction() {
-    document.getElementById('chat_input').focus();
-    chatContainer = document.getElementById('chat_container');
-    chatHistoryDiv = document.getElementById('chat_history');
-    caseAssessmentDiv = document.getElementById('case_assessment_div');
-    socket.emit('get_state', { participant: participant });
+  caseAssessmentDiv = document.getElementById('case_assessment_div');
+  socket.emit('get_state', { participant: participant });
 }
 
 socket.on('state', (state) => {
     console.log('state:');
     console.log(state);
     if(state == 'assess_without_bot') {
-      chatContainer.style.visibility = 'hidden';
       socket.emit('get_case', { participant: participant });
     }
     else if(state == 'assess_with_bot') {
-      chatContainer.style.visibility = 'visible';
+      document.getElementById('chat_input').focus();
+      chatHistoryDiv = document.getElementById('chat_history');
       socket.emit('get_case', { participant: participant });
       socket.emit('request_chat_history', { participant: participant });
     }

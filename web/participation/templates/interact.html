@@ -47,12 +47,14 @@ numCases = '{{ settings['cases']['n'] }}';
                 </div>
             </td>
 {% endif %}
+{% if state == 'assess_with_bot' %}
             <td id="chat_container">
                 <div id="chat_history"></div>
                 <div id="chat_input_div">
                   <textarea id="chat_input" onkeypress="handleKeyPress(event, this)"></textarea>
                 </div>
             </td>
+{% endif %}
         </tr>
     </table>
 </div>
