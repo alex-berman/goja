@@ -30,11 +30,16 @@ state_specific_info:
     <p>In this experiment, you will assess whether patients suffer from coronary artery disease (CAD).</p>
     <p>The patient data used in the experiment is real, but has been anonymized.</p>
     <p>All patients have been referred to coronary angiography. Prevalence of CAD in this patient group is roughly 50%.</p>
+    <p><input type="button" value="OK" onClick="emitProceed()"></p>
   before_assess_without_bot:
     <p>The experiment consists of two parts. In the first part, you will be presented with a number of patient cases. For
     each patient, you will be asked to assess whether the patient has CAD, on the basis of clinical data and test data.</p>
+    <p><input type="button" value="OK" onClick="emitProceed()"></p>
   before_assess_with_bot:
     <p>In the second part, you will make the same kind of assessment. This time, however, you will be aided by a chatbot
     that has been designed specifically for assessing CAD.</p>
     <p>The chatbot does not have access to the patient data, but you may give patient data to the chatbot.
     <p>Please do not share any personal information (such as your name) in the chat.</p>
+    <p><input type="button" value="OK" onClick="emitProceed()"></p>
+  debriefing:
+    Thank you for your participation!

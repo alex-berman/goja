@@ -41,7 +41,7 @@ def proceed(participant, cases, session_id):
 
 
 def send_update_to_client(participant, state):
-    if state in ['assess_without_bot', 'before_assess_with_bot', 'assess_with_bot']:
+    if state in ['assess_without_bot', 'before_assess_with_bot', 'assess_with_bot', 'debriefing']:
         logger.info('emitting redirect')
         emit('redirect', {'href': '?participant=' + participant})
     else:
@@ -50,8 +50,7 @@ def send_update_to_client(participant, state):
 
 def send_content_to_client(participant, state):
     logger.info('emitting content')
-    template = env.get_template('content.html')
-    content = template.render(state=state, settings=settings)
+    content = settings['state_specific_info'][state]
     emit('content', content)
 
 
