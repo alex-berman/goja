@@ -111,6 +111,7 @@ function selectCaseAssessmentOption(label) {
   socket.emit('update_assessment', {
       participant: participant,
       case_index: currentCase.index,
+      state: currentCase.state,
       assessment: label
   });
 }

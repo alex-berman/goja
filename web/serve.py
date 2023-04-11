@@ -93,7 +93,10 @@ def start():
     global_state.participants[participant] = {
         'state': ParticipationStateMachine().current_state.name,
         'dialog_history': [],
-        'assessments': {}
+        'assessments': {
+            'assess_without_bot': {},
+            'assess_with_bot': {},
+        }
     }
     if cases is not None:
         num_cases = len(cases.index)
@@ -155,22 +158,27 @@ def get_case(payload):
 
 
 def send_case(participant, session_id):
-    case_count = global_state.participants[participant]['case_count']
-    case_index = global_state.participants[participant]['shuffled_case_indexes'][case_count]
-    case = cases.iloc[case_index]
-    payload = {
-        'count': case_count + 1,
-        'index': int(case_index),
-        'features': case.to_dict(),
-        'assessment': get_assessment(participant, case_index)
-    }
-    socketio.emit('case', payload, to=session_id)
-
-
-def get_assessment(participant, case_index):
-    assessments = global_state.participants[participant]['assessments']
-    if case_index in assessments:
-        return assessments[case_index]
+    state = global_state.participants[participant]['state']
+    if state in global_state.participants[participant]['assessments']:
+        case_count = global_state.participants[participant]['case_count']
+        case_index = global_state.participants[participant]['shuffled_case_indexes'][case_count]
+        case = cases.iloc[case_index]
+        assessments =  global_state.participants[participant]['assessments'][state]
+        if case_index in assessments:
+            assessment = assessments[case_index]
+        else:
+            assessment = None
+        payload = {
+            'state': state,
+            'count': case_count + 1,
+            'index': int(case_index),
+            'features': case.to_dict(),
+            'assessment': assessment
+        }
+        logger.debug("emit case", payload=payload)
+        socketio.emit('case', payload, to=session_id)
+    else:
+        logger.debug("no assessments found", state=state)
 
 
 @socketio.on('update_assessment')
@@ -178,9 +186,11 @@ def update_assessment(payload):
     logger.info('update_assessment', payload=payload)
     participant = payload['participant']
     label = payload['assessment']
+    state = payload['state']
     case_index = global_state.participants[participant]['shuffled_case_indexes'][
         global_state.participants[participant]['case_count']]
-    global_state.participants[participant]['assessments'][case_index] = label
+    assessments =  global_state.participants[participant]['assessments'][state]
+    assessments[case_index] = label
     send_case(participant, request.sid)
 
 
