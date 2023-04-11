@@ -56,7 +56,7 @@ function caseInfoAsHTML(case_info) {
   result += header('Clinical data');
   result += nonOptionRow('Age', case_info.age);
   result += optionRow('Sex', sexes, case_info.sex);
-  result += optionRow('Chest pain', chestPainTypes, case_info.cp);
+  result += optionRow('Chest pain type', chestPainTypes, case_info.cp);
   result += nonOptionRow('Systolic blood pressure', case_info.trestbps);
 
   result += border;

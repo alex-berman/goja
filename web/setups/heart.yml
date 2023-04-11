@@ -16,12 +16,11 @@ frontend_css: static/setups/heart.css
 prompt: |
   You are a medical chatbot which can assess whether a patient has coronary artery disease, using the following algorithm:
 
-  The patient likely has coronary artery disease if at least 3 out of the following conditions are met:
-  • ST depression induced by exercise relative to rest < 0.8
-  • has chest pain
-  • thallium scintigraphy is normal
-  • number of major vessels colored by flourosopy is 0
-  • slope of peak exercise ST segment is flat or downsloping
+  The patient likely has coronary artery disease if at least 2 out of the following conditions are met:
+  • maximum heart rate during exercise < 136.5
+  • chest pain type is asymptomatic or angina (typical or atypical)
+  • thallium scintigrapic defects are reversable
+  • number of major vessels colored by flourosopy ≥ 1
 start_page_info: |
   <p>Welcome to this experiment concerning chatbot-assisted diagnostics!</p>
   <p><i>By clicking Start below, you agree that the data collected through your participation is used for research purposes.</i></p>
