@@ -63,6 +63,7 @@ logging.config.dictConfig({
 structlog.configure(
     processors=[
         structlog.processors.dict_tracebacks,
+        structlog.processors.TimeStamper(fmt="iso", key="ts", utc=False),
         structlog.processors.JSONRenderer()
     ],
     logger_factory=structlog.stdlib.LoggerFactory(),
