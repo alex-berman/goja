@@ -1,4 +1,3 @@
-import argparse
 from os import getenv
 import logging.config
 
@@ -18,24 +17,24 @@ from statemanagement import global_state
 
 cases = None
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('settings', help='path to YAML file with settings')
-    parser.add_argument('--log', default='goja.log')
-    parser.add_argument('--port')
-    parser.add_argument('--host')
-    args = parser.parse_args()
-    openai_api_key = getenv('OPENAI_API_KEY')
-    if openai_api_key is None:
-        raise Exception('Please set the OPENAI_API_KEY environment variable')
-    settings = participation.participate.settings = yaml.load(open(args.settings), yaml.Loader)
-    bot = Bot(openai_api_key, settings)
-    if 'cases' in settings:
-        if 'columns' in settings['cases']:
-            names = settings['cases']['columns']
-        else:
-            names = None
-        cases = pd.read_csv(settings['cases']['file'], names=names)
+openai_api_key = getenv('OPENAI_API_KEY')
+if openai_api_key is None:
+    raise Exception('Please set the OPENAI_API_KEY environment variable')
+
+
+settings_path = getenv('GOJA_SETUP')
+if settings_path is None:
+    raise Exception('Please set the GOJA_SETUP environement variable')
+
+
+settings = participation.participate.settings = yaml.load(open(settings_path), yaml.Loader)
+bot = Bot(openai_api_key, settings)
+if 'cases' in settings:
+    if 'columns' in settings['cases']:
+        names = settings['cases']['columns']
+    else:
+        names = None
+    cases = pd.read_csv(settings['cases']['file'], names=names)
 
 
 logging.config.dictConfig({
@@ -49,7 +48,7 @@ logging.config.dictConfig({
             "file": {
                 "level": "DEBUG",
                 "class": "logging.handlers.WatchedFileHandler",
-                "filename": args.log,
+                "filename": "goja.log",
             },
         },
         "loggers": {
