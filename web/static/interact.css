@@ -26,7 +26,7 @@ html *
 
 #chat_container {
     width: 400;
-    height: 100%;
+    height: 100vh;
     border: 2px solid #eee;
     border-radius: 20px;
     padding: 10px;
@@ -35,7 +35,7 @@ html *
 
 #chat_history {
     width: 100%;
-    height: 90%;
+    height: 85%;
     overflow-y: auto;
     scrollbar-width: 10px;
     padding-right: 10px;
