@@ -31,7 +31,9 @@ def handle_utterance(participant, utterance, bot, socketio):
 
 def get_and_process_response_from_bot(participant, bot, dialog_history, session_id, socketio):
     logger.debug('getting response from bot')
+    socketio.emit('bot_response_requested', to=session_id)
     utterance = bot.get_response(dialog_history)
+    #socketio.sleep(3); utterance = "hej"
     utterance_info = {
         'role': 'assistant',
         'content': utterance
