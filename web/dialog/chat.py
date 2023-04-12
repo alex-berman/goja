@@ -32,12 +32,16 @@ def handle_utterance(participant, utterance, bot, socketio):
 def get_and_process_response_from_bot(participant, bot, dialog_history, session_id, socketio):
     logger.debug('getting response from bot')
     socketio.emit('bot_response_requested', to=session_id)
-    utterance = bot.get_response(dialog_history)
+    utterance = ''
+    deltas = bot.get_response(dialog_history)
     #socketio.sleep(3); utterance = "hej"
+    for delta in deltas:
+        socketio.emit('bot_utterance_delta', {'role': 'assistant', 'content': delta})
+        utterance += delta
     utterance_info = {
         'role': 'assistant',
         'content': utterance
     }
+    socketio.emit('bot_response_complete', to=session_id)
     logger.info('utterance', utterance=utterance_info, participant=participant)
     dialog_history.append(utterance_info)
-    socketio.emit('utterance', utterance_info, to=session_id)

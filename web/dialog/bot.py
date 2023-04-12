@@ -16,5 +16,14 @@ class Bot:
         completion = openai.ChatCompletion.create(
             model=self._settings['model'],
             temperature=self._settings['temperature'],
-            messages=messages())
-        return completion.choices[0].message.content
+            messages=messages(),
+            stream=True)
+        for chunk in completion:
+            if 'choices' in chunk:
+                for choice in chunk['choices']:
+                    if 'delta' in choice:
+                        delta = choice['delta']
+                        if delta == {}:
+                            break
+                        if 'content' in delta:
+                            yield delta['content']

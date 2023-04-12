@@ -17,12 +17,12 @@ var roleOfPreviousUtterance;
 var chatHistoryDiv;
 var caseAssessmentDiv;
 var numCases;
-var botIsRespondingDiv;
+var botRoleDiv;
+var botUtteranceDiv;
 
 socket.on('utterance', (utterance_info) => {
     console.log('utterance:');
     console.log(utterance_info);
-    removeBotIsRespondingDiv();
     chatHistoryDiv.appendChild(createUtteranceDiv(utterance_info));
     chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
     roleOfPreviousUtterance = utterance_info.role;
@@ -138,25 +138,24 @@ function proceedWithinCases(step) {
 }
 
 socket.on('bot_response_requested', function() {
-  removeBotIsRespondingDiv();
-  botIsRespondingDiv = createBotIsRespondingDiv();
-  chatHistoryDiv.appendChild(botIsRespondingDiv);
+  var botUtteranceBubbleDiv = createUtteranceDiv({role: 'assistant', content: ''});
+  botUtteranceDiv = botUtteranceBubbleDiv.getElementsByClassName('utterance')[0];
+  botRoleDiv = botUtteranceBubbleDiv.getElementsByClassName('role')[0];
+  botRoleDiv.innerHTML = 'Bot is responding...'
+  chatHistoryDiv.appendChild(botUtteranceBubbleDiv);
   chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
 });
 
-function removeBotIsRespondingDiv() {
-    if (botIsRespondingDiv) {
-        chatHistoryDiv.removeChild(botIsRespondingDiv);
-        botIsRespondingDiv = null;
-    }
-}
+socket.on('bot_utterance_delta', (payload) => {
+  var content = payload['content'];
+  if(botUtteranceDiv) {
+    botUtteranceDiv.innerHTML += content;
+    chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
+  }
+});
 
-function createBotIsRespondingDiv() {
-    var container = document.createElement('div');
-    container.className = 'bot_is_responding';
-    var roleDiv = document.createElement('div');
-    roleDiv.className = 'role';
-    roleDiv.innerHTML = 'Bot is responding...';
-    container.appendChild(roleDiv);
-    return container;
-}
+socket.on('bot_response_complete', function() {
+  if(botRoleDiv) {
+    botRoleDiv.innerHTML = 'Bot';
+  }
+});
