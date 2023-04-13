@@ -88,9 +88,9 @@ def participate():
 @socketio.on('start')
 def start():
     logger.info('start')
-    participant = participation.participate.create_participant_id()
-    logger.info('add_participant', participant=participant)
-    global_state.participants[participant] = {
+    participant_id = participation.participate.create_participant_id()
+    logger.info('add_participant', participant=participant_id)
+    participant_info = {
         'state': ParticipationStateMachine().current_state.name,
         'dialog_history': [],
         'assessments': {
@@ -99,10 +99,16 @@ def start():
         }
     }
     if cases is not None:
-        num_cases = len(cases.index)
-        global_state.participants[participant]['shuffled_case_indexes'] = np.random.choice(num_cases, size=num_cases)
-        global_state.participants[participant]['case_count'] = 0
-    return participant
+        num_cases = settings['cases']['n']
+        case_indexes_without_bot = np.random.choice(len(cases.index), size=num_cases, replace=False)
+        case_indexes_with_bot = np.random.choice(case_indexes_without_bot, size=num_cases, replace=False)
+        participant_info['shuffled_case_indexes'] = {
+            'assess_without_bot': case_indexes_without_bot,
+            'assess_with_bot': case_indexes_with_bot,
+        }
+        participant_info['case_count'] = 0
+    global_state.participants[participant_id] = participant_info
+    return participant_id
 
 
 @socketio.on('proceed')
@@ -158,12 +164,13 @@ def get_case(payload):
 
 
 def send_case(participant, session_id):
-    state = global_state.participants[participant]['state']
-    if state in global_state.participants[participant]['assessments']:
-        case_count = global_state.participants[participant]['case_count']
-        case_index = global_state.participants[participant]['shuffled_case_indexes'][case_count]
+    participant_info = global_state.participants[participant]
+    state = participant_info['state']
+    if state in participant_info['assessments']:
+        case_count = participant_info['case_count']
+        case_index = participant_info['shuffled_case_indexes'][state][case_count]
         case = cases.iloc[case_index]
-        assessments =  global_state.participants[participant]['assessments'][state]
+        assessments = participant_info['assessments'][state]
         if case_index in assessments:
             assessment = assessments[case_index]
         else:
@@ -187,9 +194,10 @@ def update_assessment(payload):
     participant = payload['participant']
     label = payload['assessment']
     state = payload['state']
-    case_index = global_state.participants[participant]['shuffled_case_indexes'][
-        global_state.participants[participant]['case_count']]
-    assessments =  global_state.participants[participant]['assessments'][state]
+    participant_info = global_state.participants[participant]
+    case_count = participant_info['case_count']
+    case_index = participant_info['shuffled_case_indexes'][state][case_count]
+    assessments =  participant_info['assessments'][state]
     assessments[case_index] = label
     send_case(participant, request.sid)
 
