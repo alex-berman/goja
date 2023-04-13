@@ -14,7 +14,7 @@ target:
 frontend_javascript: static/setups/heart.js
 frontend_css: static/setups/heart.css
 prompt: |
-  You are a medical chatbot which can assess whether a patient has coronary artery disease, using the following algorithm:
+  You are a medical chatbot which can assess whether a patient has coronary artery disease (CAD), using the following algorithm:
 
   The patient likely has coronary artery disease if at least 2 out of the following conditions are met:
   • maximum heart rate during exercise < 136.5
