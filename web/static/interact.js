@@ -166,3 +166,9 @@ socket.on('bot_response_complete', function() {
     botRoleDiv.innerHTML = 'Bot';
   }
 });
+
+function restartChat() {
+  chatHistoryDiv = document.getElementById('chat_history');
+  chatHistoryDiv.innerHTML = '';
+  socket.emit('restart_chat', { participant: participant });
+}

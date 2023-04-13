@@ -92,7 +92,7 @@ def start():
     logger.info('add_participant', participant=participant_id)
     participant_info = {
         'state': ParticipationStateMachine().current_state.name,
-        'dialog_history': [],
+        'dialog_histories': [],
         'assessments': {
             'assess_without_bot': {},
             'assess_with_bot': {},
@@ -216,6 +216,14 @@ def proceed_within_cases(payload):
             new_case_count = 0
         global_state.participants[participant]['case_count'] = new_case_count
         send_case(participant, request.sid)
+
+
+@socketio.on('restart_chat')
+def restart_chat(payload):
+    logger.info('restart_chat', payload=payload)
+    participant = payload['participant']
+    participation.participate.initialize_chat(participant)
+    dialog.chat.send_history(participant)
 
 
 if __name__ == '__main__':

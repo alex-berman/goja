@@ -49,6 +49,7 @@ numCases = '{{ settings['cases']['n'] }}';
 {% endif %}
 {% if state == 'assess_with_bot' %}
             <td id="chat_container">
+                <button class="buttonRestartChat" onClick="restartChat()">Restart chat</button>
                 <div id="chat_history"></div>
                 <div id="chat_input_div">
                   <textarea id="chat_input" onkeypress="handleKeyPress(event, this)"></textarea>

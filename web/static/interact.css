@@ -131,6 +131,7 @@ html *
     border-radius: 10px;
     padding: 10;
     cursor: pointer;
+    background-color: white;
 }
 
 .navigationButton[disabled], .navigationButton:disabled {
@@ -138,4 +139,13 @@ html *
     background-color: #f8f8f8;
     color: #aaa;
     cursor: default;
+}
+
+.buttonRestartChat {
+  position: relative;
+  top: -20px;
+  cursor: pointer;
+  border-radius: 10px;
+  padding: 5;
+  background-color: white;
 }

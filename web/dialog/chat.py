@@ -7,8 +7,13 @@ logger = None
 
 
 def send_history(participant):
-    for utterance_info in global_state.participants[participant]['dialog_history']:
-        emit('utterance', utterance_info)
+    dialog_histories = global_state.participants[participant]['dialog_histories']
+    if len(dialog_histories) > 0:
+        current_dialog_history = dialog_histories[-1]
+        for utterance_info in current_dialog_history:
+            emit('utterance', utterance_info)
+    else:
+        logger.warning("no dialog histories")
 
 
 def handle_utterance(participant, utterance, bot, socketio):
@@ -18,11 +23,16 @@ def handle_utterance(participant, utterance, bot, socketio):
     }
     participant_info = global_state.participants[participant]
     logger.info('utterance', utterance=utterance_info, participant=participant)
-    participant_info['dialog_history'].append(utterance_info)
-    session_id = participant_info['session_id']
-    emit('utterance', utterance_info, to=session_id)
-    socketio.start_background_task(
-        get_and_process_response_from_bot, participant, bot, participant_info['dialog_history'], session_id, socketio)
+    dialog_histories = participant_info['dialog_histories']
+    if len(dialog_histories) > 0:
+        current_dialog_history = dialog_histories[-1]
+        current_dialog_history.append(utterance_info)
+        session_id = participant_info['session_id']
+        emit('utterance', utterance_info, to=session_id)
+        socketio.start_background_task(
+            get_and_process_response_from_bot, participant, bot, current_dialog_history, session_id, socketio)
+    else:
+        logger.warning("no dialog histories")
 
 
 def get_and_process_response_from_bot(participant, bot, dialog_history, session_id, socketio):

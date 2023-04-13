@@ -46,9 +46,10 @@ def proceed(participant, cases, session_id):
 
 def initialize_chat(participant):
     participant_info = global_state.participants[participant]
+    dialog_history = []
+    participant_info['dialog_histories'].append(dialog_history)
     if 'initial_assistant_utterance' in settings:
-        dialog.chat.log_and_store_bot_utterance(
-            settings['initial_assistant_utterance'], participant, participant_info['dialog_history'])
+        dialog.chat.log_and_store_bot_utterance(settings['initial_assistant_utterance'], participant, dialog_history)
 
 
 def send_update_to_client(participant, state):

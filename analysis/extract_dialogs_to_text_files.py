@@ -17,17 +17,28 @@ def extract(log_path, output_dir_path):
             event = entry['event']
             if event == 'utterance':
                 process_utterance(entry)
+            elif event == 'restart_chat':
+                process_restart_chat(entry)
 
     def process_utterance(entry):
         participant = entry['participant']
+        output = get_output(participant)
+        append_utterance_to_output(output, entry['utterance']['role'], entry['utterance']['content'])
+
+    def get_output(participant):
         if participant in outputs:
             output = outputs[participant]
         else:
             output = outputs[participant] = open(output_file_path(participant), 'w')
-        append_utterance_to_output(output, entry['utterance']['role'], entry['utterance']['content'])
+        return output
 
     def append_utterance_to_output(output, role, content):
         output.write(f'{generate_role(role)}: {content}\n\n')
+
+    def process_restart_chat(entry):
+        participant = entry['payload']['participant']
+        output = get_output(participant)
+        output.write('-' * 40 + '\n\n')
 
     for line in open(log_path):
         try:
