@@ -153,7 +153,7 @@ socket.on('bot_response_requested', function() {
 socket.on('bot_utterance_delta', (payload) => {
   var content = payload['content'];
   if(botUtteranceDiv) {
-    botUtteranceDiv.innerHTML += content;
+    botUtteranceDiv.innerHTML += formatUtterance(content);
     chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
   }
   if(botUtteranceBubbleDiv) {
