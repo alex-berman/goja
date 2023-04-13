@@ -202,6 +202,7 @@ def proceed_within_cases(payload):
     new_case_count = case_count + payload['step']
     if new_case_count >= settings['cases']['n']:
         participation.participate.proceed(participant, cases, request.sid)
+        global_state.participants[participant]['case_count'] = 0
     else:
         if new_case_count < 0:
             new_case_count = 0
