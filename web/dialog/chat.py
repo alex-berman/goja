@@ -1,7 +1,3 @@
-import random
-from collections import defaultdict
-import time
-
 from flask_socketio import emit
 
 from statemanagement import global_state
@@ -38,10 +34,14 @@ def get_and_process_response_from_bot(participant, bot, dialog_history, session_
     for delta in deltas:
         socketio.emit('bot_utterance_delta', {'role': 'assistant', 'content': delta})
         utterance += delta
+    socketio.emit('bot_response_complete', to=session_id)
+    log_and_store_bot_utterance(utterance, participant, dialog_history)
+
+
+def log_and_store_bot_utterance(utterance, participant, dialog_history):
     utterance_info = {
         'role': 'assistant',
         'content': utterance
     }
-    socketio.emit('bot_response_complete', to=session_id)
     logger.info('utterance', utterance=utterance_info, participant=participant)
     dialog_history.append(utterance_info)

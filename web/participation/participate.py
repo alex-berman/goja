@@ -10,6 +10,8 @@ from statemanagement import global_state
 
 
 env = Environment(loader=PackageLoader('participation.participate'))
+settings = None
+logger = None
 
 
 def create_participant_id():
@@ -37,7 +39,16 @@ def proceed(participant, cases, session_id):
     new_state = state_machine.current_state.name
     logger.info(f'state after proceeding: {new_state}')
     global_state.participants[participant]['state'] = new_state
+    if new_state == 'assess_with_bot':
+        initialize_chat(participant)
     send_update_to_client(participant, new_state)
+
+
+def initialize_chat(participant):
+    participant_info = global_state.participants[participant]
+    if 'initial_assistant_utterance' in settings:
+        dialog.chat.log_and_store_bot_utterance(
+            settings['initial_assistant_utterance'], participant, participant_info['dialog_history'])
 
 
 def send_update_to_client(participant, state):
