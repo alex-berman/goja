@@ -5,7 +5,7 @@ temperature: 0
 cases:
   file: datasets/processed.cleveland.data
   columns: [ 'age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal', 'target' ]
-  n: 1
+  n: 5
 target:
   description: "Patient has coronary artery disease:"
   labels:
@@ -41,6 +41,7 @@ state_specific_info:
     that has been designed specifically for assessing CAD.</p>
     <p>The chatbot does not have access to the patient data, but you may give patient data to the chatbot.
     <p>Please do not share any personal information (such as your name) in the chat.</p>
+    <p>Note that the patient cases may be different than in the first part.</p>
     <p><input type="button" value="OK" onClick="emitProceed()"></p>
   debriefing:
     Thank you for your participation!
