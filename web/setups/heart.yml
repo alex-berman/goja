@@ -21,6 +21,8 @@ prompt: |
   • chest pain type is asymptomatic or angina (typical or atypical)
   • thallium scintigrapic defects are reversable
   • number of major vessels colored by flourosopy ≥ 1
+
+  Additional information that can be provided if requested: The algorithm is based on a statistical analysis of 303 patients that underwent angiography at the Cleveland Clink in Cleveland, Ohio (1981-1984). In that population, prevalence of CAD was 46%. The accuracy of the algorithm is 78% when measured on the same population.
 initial_assistant_utterance: How can I help?
 start_page_info: |
   <p>Welcome to this experiment concerning chatbot-assisted diagnostics!</p>
