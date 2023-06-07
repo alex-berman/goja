@@ -63,6 +63,7 @@ def extract(log_path, settings_path, classifier_module_path, output_csv_path):
                 print(f'accuracy_without_bot={accuracy_without_bot}')
                 print(f'classifier_accuracy={classifier_accuracy}')
                 print(f'accuracy_with_bot={accuracy_with_bot}')
+                print()
 
 
 if __name__ == '__main__':

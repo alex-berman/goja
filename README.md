@@ -30,3 +30,10 @@ export GOJA_SETUP=setups/heart.yml
 ```
 
 The link for participation is now shown in the console (typically http://127.0.0.1:5000)
+
+## Analysis
+To extract reliance data for analysis of quality of human-AI interaction:
+```
+cd web
+python analysis/extract_reliance_data.py goja.log setups/heart.yml setups.heart ../data/reliance.csv
+```
