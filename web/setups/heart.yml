@@ -11,6 +11,9 @@ target:
   labels:
     0: "No"
     1: "Yes"
+  dataset_values:
+    0: [0]
+    1: [1,2,3,4]
 frontend_javascript: static/setups/heart.js
 frontend_css: static/setups/heart.css
 prompt: |
