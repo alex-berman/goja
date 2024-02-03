@@ -42,7 +42,7 @@ def get_and_process_response_from_bot(participant, bot, dialog_history, session_
     deltas = bot.get_response(dialog_history)
     #socketio.sleep(3); utterance = "hej"
     for delta in deltas:
-        socketio.emit('bot_utterance_delta', {'role': 'assistant', 'content': delta})
+        socketio.emit('bot_utterance_delta', {'role': 'assistant', 'content': delta}, to=session_id)
         utterance += delta
     socketio.emit('bot_response_complete', to=session_id)
     log_and_store_bot_utterance(utterance, participant, dialog_history)
